@@ -122,6 +122,25 @@ class FileSystemController extends Controller
         unset($parent[$parts[array_key_last($parts)]]); //unset the array to free memory used
         return response()->json(['message' => 'Directory deleted']); //return message with
     }
+
+    /*
+    Function that lists the directory contents
+    */
+    public function listDirectoryContents(Request $request)
+    {
+        $path = $request->input('path');
+
+        if (!$path) {
+            return response()->json(['error' => 'Path is required']);
+        }
+
+        $directory = &$this->findDirectory($path);
+        if (is_null($directory)) {
+            return response()->json(['error' => 'Directory does not exist']);
+        }
+
+        return response()->json(['contents' => $directory]);
+    }
 }
 
 
